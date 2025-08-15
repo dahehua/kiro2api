@@ -18,9 +18,18 @@ dependencies = [
     "json_repair>=0.49.0"
 ]
 
-[project.scripts]
-ki2 = "src.cli:main"
-
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["*"]
+
+[project.scripts]
+ki2 = "kiro2api.app:main"
+
+
+
+#单脚本配置：
+#[tool.setuptools]
+#package-dir = {"" = "src"}
+#py-modules = ["app", "cli", "my_script"]
+
+#[project.scripts]
+#ki2 = "app:main"
