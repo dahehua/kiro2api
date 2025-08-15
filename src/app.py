@@ -1,5 +1,6 @@
 import os
 import json
+from pathlib import Path
 import time
 import uuid
 import httpx
@@ -27,15 +28,23 @@ load_dotenv()
 
 # Initialize FastAPI app
 app = FastAPI(
-    title="Ki2API - Claude Sonnet 4 OpenAI Compatible API",
+    title="Kiro2API - Claude Sonnet 4 OpenAI Compatible API",
     description="OpenAI-compatible API for Claude Sonnet 4 via AWS CodeWhisperer",
-    version="3.0.1"
+    version="1.0.0"
 )
+
+# kiro_file = "/Users/vill/.aws/sso/cache/kiro-auth-token.json"
+# kiro_file =  os.path.expanduser("~/.aws/sso/cache/kiro-auth-token.json")
+# kiro_path = Path(kiro_file)
+kiro_path = Path.home() / ".aws/sso/cache/kiro-auth-token.json"
+
+with open(kiro_path, 'r', encoding='utf-8') as f:
+    kiro_config = json.load(f)
 
 # Configuration
 API_KEY = os.getenv("API_KEY", "ki2api-key-2024")
-KIRO_ACCESS_TOKEN = os.getenv("KIRO_ACCESS_TOKEN")
-KIRO_REFRESH_TOKEN = os.getenv("KIRO_REFRESH_TOKEN")
+KIRO_ACCESS_TOKEN = os.getenv("KIRO_ACCESS_TOKEN") or kiro_config.get('accessToken')
+KIRO_REFRESH_TOKEN = os.getenv("KIRO_REFRESH_TOKEN") or kiro_config.get('refreshToken')
 KIRO_BASE_URL = "https://codewhisperer.us-east-1.amazonaws.com/generateAssistantResponse"
 PROFILE_ARN = "arn:aws:codewhisperer:us-east-1:699475941385:profile/EHGA3GRVQMUK"
 
@@ -1151,7 +1160,7 @@ async def list_models(api_key: str = Depends(verify_api_key)):
                 "id": model_id,
                 "object": "model",
                 "created": int(time.time()),
-                "owned_by": "ki2api"
+                "owned_by": "kiro2api"
             }
             for model_id in MODEL_MAP.keys()
         ]
@@ -1770,15 +1779,15 @@ async def create_streaming_response(request: ChatCompletionRequest):
 @app.get("/health")
 async def health_check():
     """Health check endpoint"""
-    return {"status": "healthy", "service": "Ki2API", "version": "3.0.1"}
+    return {"status": "healthy", "service": "Kiro2API", "version": "1.0.0"}
 
 @app.get("/")
 async def root():
     """Root endpoint with service information"""
     return {
-        "service": "Ki2API",
+        "service": "Kiro2API",
         "description": "OpenAI-compatible API for Claude Sonnet 4 via AWS CodeWhisperer",
-        "version": "3.0.1",
+        "version": "1.0.0",
         "endpoints": {
             "models": "/v1/models",
             "chat": "/v1/chat/completions",
@@ -1795,6 +1804,9 @@ async def root():
         }
     }
 
-if __name__ == "__main__":
+def main():
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8989)
+
+if __name__ == "__main__":
+    main()
