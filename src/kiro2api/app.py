@@ -69,6 +69,7 @@ class ToolCall(BaseModel):
     id: str
     type: str = "function"
     function: Dict[str, Any]
+    
 class ChatMessage(BaseModel):
     role: str
     content: Union[str, List[ContentPart], None]
@@ -1804,9 +1805,9 @@ async def root():
         }
     }
 
-def main():
+def main(port: int = 8989):
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8989)
+    uvicorn.run(app, host="0.0.0.0", port=port)
 
 if __name__ == "__main__":
     main()

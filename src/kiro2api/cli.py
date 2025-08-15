@@ -10,22 +10,36 @@ def main():
     )
     
     parser.add_argument(
-        '-u', '--up', 
+        '-s', '--start', 
         action='store_true',
+        # dest='start',  # 将该选项的值存储在 args.up 中
+        default=False,  # 默认值为 False
+         # 如果没有提供该选项，则 args.up 将为 False
         help='Start the API server'
     )
     
     parser.add_argument(
-        '-s', '--settings',
+        '-p', '--port', 
+        required=False,                 # 这个选项是可选的
+        type=int,                       # 期望接收一个整数类型的值
+        dest="listen_port",            # 指定存储该值的属性名为 args.program_kind
+        default=8989,               # 如果没有提供该选项，则使用默认值 8989
+        help='Port to run the API server on (default: 8989)'
+    )
+    
+    parser.add_argument(
+        '-i', '--info',
         action='store_true', 
+        dest='settings',  # 将该选项的值存储在 args.settings 中
         help='Show current settings and configuration'
     )
     
     args = parser.parse_args()
     
-    if args.up:
-        print("Starting Kiro2API server...")
-        start_app()
+    if args.start:
+        port = args.listen_port
+        print(f"Starting Kiro2API server on port {port}...")
+        start_app(port)
     elif args.settings:
         show_settings()
     else:
@@ -58,3 +72,4 @@ def show_settings():
 
 if __name__ == '__main__':
     main()
+    # python -m src.kiro2api.cli   
