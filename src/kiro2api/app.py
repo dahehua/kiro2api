@@ -19,6 +19,7 @@ from dotenv import load_dotenv
 from json_repair import repair_json
 
 # Configure logging
+# logging.basicConfig(level=logging.DEBUG) # for detailed debugging
 # logging.basicConfig(level=logging.INFO) # for dev
 logging.basicConfig(level=logging.WARNING) 
 logger = logging.getLogger(__name__)
@@ -42,7 +43,7 @@ with open(kiro_path, 'r', encoding='utf-8') as f:
     kiro_config = json.load(f)
 
 # Configuration
-API_KEY = os.getenv("API_KEY", "ki2api-key-2024")
+# API_KEY = os.getenv("API_KEY", "ki2api-key-2024")
 KIRO_ACCESS_TOKEN = os.getenv("KIRO_ACCESS_TOKEN") or kiro_config.get('accessToken')
 KIRO_REFRESH_TOKEN = os.getenv("KIRO_REFRESH_TOKEN") or kiro_config.get('refreshToken')
 KIRO_BASE_URL = "https://codewhisperer.us-east-1.amazonaws.com/generateAssistantResponse"
@@ -51,7 +52,8 @@ PROFILE_ARN = "arn:aws:codewhisperer:us-east-1:699475941385:profile/EHGA3GRVQMUK
 # Model mapping
 MODEL_MAP = {
     "claude-sonnet-4-20250514": "CLAUDE_SONNET_4_20250514_V1_0",
-    "claude-3-5-haiku-20241022": "CLAUDE_3_7_SONNET_20250219_V1_0",
+    # "claude-3-5-haiku-20241022": "CLAUDE_3_7_SONNET_20250219_V1_0",
+    "claude-3-7-sonnet-20250219": "CLAUDE_3_7_SONNET_20250219_V1_0",
 }
 DEFAULT_MODEL = "claude-sonnet-4-20250514"
 
@@ -1152,7 +1154,9 @@ def create_usage_stats(prompt_text: str, completion_text: str) -> Usage:
 
 # API endpoints
 @app.get("/v1/models")
-async def list_models(api_key: str = Depends(verify_api_key)):
+async def list_models(
+    # api_key: str = Depends(verify_api_key)
+    ):
     """List available models"""
     return {
         "object": "list",
@@ -1170,7 +1174,7 @@ async def list_models(api_key: str = Depends(verify_api_key)):
 @app.post("/v1/chat/completions")
 async def create_chat_completion(
     request: ChatCompletionRequest,
-    api_key: str = Depends(verify_api_key)
+    # api_key: str = Depends(verify_api_key)
 ):
     """Create a chat completion"""
     logger.info(f"📥 COMPLETE REQUEST: {request.model_dump_json(indent=2)}")

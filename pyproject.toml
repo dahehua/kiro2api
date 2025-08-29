@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "kiro2api"
-version = "1.0.2"
+version = "1.0.0"
 description = "OpenAI-compatible API for Claude Sonnet 4 via AWS CodeWhisperer"
 readme = "README.md"
 requires-python = ">=3.13"

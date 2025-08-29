@@ -34,6 +34,13 @@ def main():
         help='Show current settings and configuration'
     )
     
+    parser.add_argument(
+        '-v', '--version',
+        action='store_true', 
+        dest='_VERSION',  # 将该选项的值存储在 args._VERSION 中
+        help='Show current version '
+    )
+    
     args = parser.parse_args()
     
     if args.start:
@@ -42,8 +49,15 @@ def main():
         start_app(port)
     elif args.settings:
         show_settings()
+    elif args._VERSION:
+        show_version()
     else:
         parser.print_help()
+
+def  show_version():
+    """Display current version"""
+    from . import __version__
+    print(f"Kiro2API Version: {__version__}")
 
 def show_settings():
     """Display current configuration settings"""
@@ -60,7 +74,7 @@ def show_settings():
     
     # Environment variables
     print(f"\nEnvironment Variables:")
-    print(f"API_KEY: {os.getenv('API_KEY', 'ki2api-key-2024')}")
+    # print(f"API_KEY: {os.getenv('API_KEY', 'ki2api-key-2024')}")
     print(f"KIRO_ACCESS_TOKEN: {'Set' if os.getenv('KIRO_ACCESS_TOKEN') else 'Not set'}")
     print(f"KIRO_REFRESH_TOKEN: {'Set' if os.getenv('KIRO_REFRESH_TOKEN') else 'Not set'}")
     
