@@ -9,7 +9,7 @@ from pathlib import Path
 from .app import main as start_app
 
 # PID文件路径
-PID_FILE = Path.home() / ".kiro2api" / "kiro2api.pid"
+PID_FILE = Path.home() / ".kiro2api" / ".kiro2api.pid"
 LOG_FILE = Path.home() / ".kiro2api" / "kiro2api.log"
 
 def main():
